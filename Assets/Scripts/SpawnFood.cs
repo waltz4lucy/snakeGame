@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class SpawnFood : MonoBehaviour
 {
-    public GameObject foodPrefab;
-    public Transform borderTop;
-    public Transform borderBottom;
-    public Transform borderLeft;
-    public Transform borderRight;
+    [SerializeField] private GameObject foodPrefab;
+    [SerializeField] private Transform borderTop;
+    [SerializeField] private Transform borderBottom;
+    [SerializeField] private Transform borderLeft;
+    [SerializeField] private Transform borderRight;
 
     void Start()
     {
@@ -17,9 +17,15 @@ public class SpawnFood : MonoBehaviour
 
     private void Spawn()
     {
-        int x = (int)Random.Range(borderLeft.position.x, borderRight.position.x);
-        int y = (int)Random.Range(borderBottom.position.y, borderTop.position.y);
+        if (GameObject.Find(foodPrefab.transform.name))
+        {
+            return;
+        }
 
-        Instantiate(foodPrefab, new Vector2(x, y), Quaternion.identity);
+        var x = (int)Random.Range(borderLeft.position.x, borderRight.position.x);
+        var y = (int)Random.Range(borderBottom.position.y, borderTop.position.y);
+
+        var go = Instantiate<GameObject>(foodPrefab, new Vector2(x, y), Quaternion.identity);
+        go.transform.name = foodPrefab.transform.name;
     }
 }

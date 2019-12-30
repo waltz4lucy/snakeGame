@@ -5,9 +5,10 @@ using System.Linq;
 
 public class Snake : MonoBehaviour
 {
-    public GameObject tailPrefab;
-    private Vector2 dir = Vector2.up;
+    [SerializeField] private GameObject tailPrefab;
+
     private List<Transform> tail = new List<Transform>();
+    private Vector2 dir = Vector2.up;
     private bool isEat = false;
 
     void Start()
@@ -50,18 +51,19 @@ public class Snake : MonoBehaviour
 
     private void Move()
     {
-        Vector2 v = transform.position;
+        var position = transform.position;
         transform.Translate(dir);
 
         if (isEat)
         {
-            GameObject g = (GameObject)Instantiate(tailPrefab, v, Quaternion.identity);
-            tail.Insert(0, g.transform);
+            var go = Instantiate<GameObject>(tailPrefab, position, Quaternion.identity);
+            go.transform.name = tailPrefab.transform.name;
+            tail.Insert(0, go.transform);
             isEat = false;
         }
         else if (tail.Count > 0)
         {
-            tail.Last().position = v;
+            tail.Last().position = position;
             tail.Insert(0, tail.Last());
             tail.RemoveAt(tail.Count - 1);
         }
